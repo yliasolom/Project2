@@ -4,14 +4,20 @@
 wget - download raw data from ncbi
 #We need sequence in .fasta format (*_genomic.fna.gz) and annotation in .gff format(*_genomic.gff.gz)and also raw data
 
+
+
 2. Inspect data
 head 20                    (first 2- lines)
 cat                        (see inside)
 wc -l                      (how many reads are in each fastq file)
 
+
+
 3. Filtering the reads FastQC
 conda create -n fastqc_tool -c conda-forge -c bioconda -c default fastqc 
 fastqc [paired1] [paired2]  
+
+
 
 4. TRIMMOMATIC
 #we used different quality:
@@ -20,7 +26,9 @@ fastqc [paired1] [paired2]
 30: LEADING:30 TRAILING:30 SLIDINGWINDOW:10:30 MINLEN:30 ILLUMINACLIP: TruSeq3-PE.fa:2:30:10
 Usage: [-version] [-threads <threads>] [-phred33|-phred64] [-trimlog <trimLogFile>] [-summary <statsSummaryFile>] [-quiet] [-validatePairs] [-basein <inputBase> | <inputFile1> <inputFile2>] [-baseout <outputBase> | <outputFile1P> <outputFile1U> <outputFile2P> <outputFile2U>] <trimmer1>...
 
-5. Install aligner BWA-MEM
+
+
+5. BWA-MEM (alignment via Burrows-Wheeler transformation)
 1. install bwa 
 2. Index the reference file 
 3. Align the reads
@@ -30,10 +38,35 @@ Usage: [-version] [-threads <threads>] [-phred33|-phred64] [-trimlog <trimLogFil
 7. Index bam file for faster search
 --------------------
 conda create -n bwa_tool -c conda-forge -c bioconda bwa
+bwa index [reference]
+bwa mem   [bwa mem [options] <idxbase> <in1.fq> [in2.fq]]
+---------------------
+conda create -n sam_tool -c conda-forge -c bioconda samtools (Tools for alignments in the SAM format)
+samtools view [options(-S we used)] <in.bam>|<in.sam>|<in.cram> [region ...]
+samtools flagstat [options] <in.bam> 
+samtools sort [options...] [in.bam]       (Sort bam file by sequence coordinate on reference, WHERE -O, --output-fmt FORMAT)
+samtools index [-bc] [-m INT] <in.bam> [out.index]
 
-5. Variant calling
 
-7. Variant effect prediction
+5. IGV (https://software.broadinstitute.org/software/igv/) IGV 
+ (“Genomes”, ”Load Genome from File” and select our reference genome. Then select “File”, “Open from file” and select your BAM file. )
+ 
+ 
+ 
+ 6. Variant calling
+ samtools mpileup [options] in1.bam [in2.bam [...]] where -f, --fasta-ref FILE    faidx indexed reference sequence file
+
+
+
+7. Variant effect prediction (VarScan: http://dkoboldt.github.io/varscan/)
+conda create -n varscan_tool -c conda-forge -c soil varscan
+java -jar VarScan.v2.4.3.jar mpileup2snp my.mpileup --min-var-freq 0.5 --variants --output-vcf 1 > VarScan_results.vcf
+
+8. End IGV:
+1) Genome -> Local file (.fasta + .fasta.fai)
+2) { Tracks -> Local file (.gff) } - for HW_1, for HW_2 it's no need 
+3) Tracks -> Local file (.bam + .bam.bai)
+4) Tracks -> Local file (.vcf)
 
 
 
