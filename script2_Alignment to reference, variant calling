@@ -1,1 +1,41 @@
+#What causes antibiotic resistance?
+
+1. Get the data
+wget - download raw data from ncbi
+#We need sequence in .fasta format (*_genomic.fna.gz) and annotation in .gff format(*_genomic.gff.gz)and also raw data
+
+2. Inspect data
+head 20                    (first 2- lines)
+cat                        (see inside)
+wc -l                      (how many reads are in each fastq file)
+
+3. Filtering the reads FastQC
+conda create -n fastqc_tool -c conda-forge -c bioconda -c default fastqc 
+fastqc [paired1] [paired2]  
+
+4. TRIMMOMATIC
+#we used different quality:
+20: trimmomatic PE -phred33 amp_res_1.fastq amp_res_2.fastq outer/pairedPE_1.fq outer/singlePE_1.fq folder/pairedPE_2.fq outer/singlePE_2.fq LEADING:20 TRAILING:20 MINLEN:20 
+
+30: LEADING:30 TRAILING:30 SLIDINGWINDOW:10:30 MINLEN:30 ILLUMINACLIP: TruSeq3-PE.fa:2:30:10
+Usage: [-version] [-threads <threads>] [-phred33|-phred64] [-trimlog <trimLogFile>] [-summary <statsSummaryFile>] [-quiet] [-validatePairs] [-basein <inputBase> | <inputFile1> <inputFile2>] [-baseout <outputBase> | <outputFile1P> <outputFile1U> <outputFile2P> <outputFile2U>] <trimmer1>...
+
+5. Install aligner BWA-MEM
+1. install bwa 
+2. Index the reference file 
+3. Align the reads
+4. Compress SAM file
+5. Sort and index BAM file
+6. Sort bam file by sequence coordinate on reference
+7. Index bam file for faster search
+--------------------
+conda create -n bwa_tool -c conda-forge -c bioconda bwa
+
+5. Variant calling
+
+7. Variant effect prediction
+
+
+
+
 
