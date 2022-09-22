@@ -14,7 +14,7 @@ wc -l                      (how many reads are in each fastq file)
 
 
 3. Filtering the reads FastQC
-conda create -n fastqc_tool -c conda-forge -c bioconda -c default fastqc 
+conda create -n fastqc_tool -c conda-forge -c bioconda -c fastqc 
 fastqc [paired1] [paired2]  
 
 
@@ -23,8 +23,10 @@ fastqc [paired1] [paired2]
 #we used different quality:
 20: trimmomatic PE -phred33 amp_res_1.fastq amp_res_2.fastq outer/pairedPE_1.fq outer/singlePE_1.fq folder/pairedPE_2.fq outer/singlePE_2.fq LEADING:20 TRAILING:20 MINLEN:20 
 
-30: LEADING:30 TRAILING:30 SLIDINGWINDOW:10:30 MINLEN:30 ILLUMINACLIP: TruSeq3-PE.fa:2:30:10
-Usage: [-version] [-threads <threads>] [-phred33|-phred64] [-trimlog <trimLogFile>] [-summary <statsSummaryFile>] [-quiet] [-validatePairs] [-basein <inputBase> | <inputFile1> <inputFile2>] [-baseout <outputBase> | <outputFile1P> <outputFile1U> <outputFile2P> <outputFile2U>] <trimmer1>...
+30: ...LEADING:30 TRAILING:30 SLIDINGWINDOW:10:30 MINLEN:30 ILLUMINACLIP: TruSeq3-PE.fa:2:30:10 
+Usage: [-version] [-threads <threads>] [-phred33|-phred64] [-trimlog <trimLogFile>] [-summary <statsSummaryFile>] [-quiet]
+[-validatePairs] [-basein <inputBase> | <inputFile1> <inputFile2>] [-baseout <outputBase> | <outputFile1P> <outputFile1U> <outputFile2P> <outputFile2U>]
+<trimmer1>TOPRHRED33
 
 
 
@@ -54,7 +56,7 @@ samtools index [-bc] [-m INT] <in.bam> [out.index]
  
  
  6. Variant calling
- samtools mpileup [options] in1.bam [in2.bam [...]] where -f, --fasta-ref FILE    faidx indexed reference sequence file
+ samtools mpileup [options] in1.bam [in2.bam [...]] where -f, --fasta-ref FILE    (faidx indexeS reference sequence file)
 
 
 
