@@ -64,11 +64,29 @@ samtools index [-bc] [-m INT] <in.bam> [out.index]
 conda create -n varscan_tool -c conda-forge -c soil varscan
 java -jar VarScan.v2.4.3.jar mpileup2snp my.mpileup --min-var-freq 0.5 --variants --output-vcf 1 > VarScan_results.vcf
 
-8. End IGV:
+8.IGV:
 1) Genome -> Local file (.fasta + .fasta.fai)
 2) { Tracks -> Local file (.gff) } - for HW_1, for HW_2 it's no need 
 3) Tracks -> Local file (.bam + .bam.bai)
 4) Tracks -> Local file (.vcf)
+
+9. snpEFF (annotation of snips)
+wget http://pcingola.github.io/SnpEff/
+#then the reference to build database:
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/005/845/GCF_000005845.2_ASM584v2/GCF_000005845.2_ASM584v2_genomic.gbff.gz
+#create database 
+touch snpeff.config
+nano snpeff.config #and and add there one stirng: k12.genome : ecoli_K12
+#create folder for the database
+mkdir -p data/k12
+# Put there your .gbk file (unzip and rename to genes.gbk)
+gunzip GCF_000005845.2_ASM584v2_genomic.gbff.gz
+cp GCF_000005845.2_ASM584v2_genomic.gbff data/k12/genes.gbk
+#create database
+snpEff build -genbank -v k12
+#annotate it!!!!)))
+snpEff ann k12 VarScan_results_0.5.vcf
+
 
 
 
